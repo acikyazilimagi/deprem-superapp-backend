@@ -1,6 +1,6 @@
 <div align="center">
     <h1>Deprem Superapp Backend</h1>
-    <h3>Basit arayüzlü Deprem Superapp projesinin backendi.</h3>
+    <h3>Basit arayüzlü https://depremproje.com un backendi.</h3>
 </div>
 
 <br>
