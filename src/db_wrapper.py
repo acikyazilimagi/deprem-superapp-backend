@@ -107,6 +107,9 @@ class DbWrapper:
 
             logger.info("Set map data method was called.")
 
+            if payload["notlar"]:
+                payload["notlar"] = payload["notlar"].lower()
+
             return HTTPException(
                 status_code=200,
                 detail=collection.insert_one(payload).inserted_id,
@@ -128,6 +131,9 @@ class DbWrapper:
             collection = self.get_collection("service_points")
 
             logger.info("Set service point method was called.")
+
+            if payload["notlar"]:
+                payload["notlar"] = payload["notlar"].lower()
 
             return HTTPException(
                 status_code=200,
@@ -160,6 +166,7 @@ class DbWrapper:
             if payload["servis"]:
                 query["servis"] = {"$all": payload["servis"]}
             if payload["notlar"]:
+                query["notlar"] = query["notlar"].lower()
                 query["notlar"] = {"$regex": f".*{payload['notlar']}.*"}
 
             logger.info(query)
@@ -199,6 +206,7 @@ class DbWrapper:
                 if payload["gereksinimler"]:
                     query["gereksinimler"] = {"$all": payload["gereksinimler"]}
                 if payload["notlar"]:
+                    query["notlar"] = query["notlar"].lower()
                     query["notlar"] = {"$regex": f".*{payload['notlar']}.*"}
                 if payload["baslangic_zaman"] and payload["bitis_zaman"]:
                     query["zaman"] = {
