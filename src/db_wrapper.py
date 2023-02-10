@@ -1,4 +1,5 @@
 import os
+import re
 
 import certifi
 import pymongo
@@ -97,6 +98,16 @@ class DbWrapper:
             logger.error(e)
             return e
 
+    def tr_lower(self, string_data):
+        string_data = re.sub(r"İ", "i", string_data)
+        string_data = re.sub(r"I", "ı", string_data)
+        string_data = re.sub(r"Ç", "ç", string_data)
+        string_data = re.sub(r"Ş", "ş", string_data)
+        string_data = re.sub(r"Ü", "ü", string_data)
+        string_data = re.sub(r"Ğ", "ğ", string_data)
+        string_data = string_data.lower()  # for the rest use default lower
+        return string_data
+
     def set_map_data(self, payload: dict):
         """
         :param payload: the data to insert
@@ -108,7 +119,7 @@ class DbWrapper:
             logger.info("Set map data method was called.")
 
             if payload["notlar"]:
-                payload["notlar"] = payload["notlar"].lower()
+                payload["notlar"] = self.tr_lower(payload["notlar"])
 
             return HTTPException(
                 status_code=200,
@@ -133,7 +144,7 @@ class DbWrapper:
             logger.info("Set service point method was called.")
 
             if payload["notlar"]:
-                payload["notlar"] = payload["notlar"].lower()
+                payload["notlar"] = self.tr_lower(payload["notlar"])
 
             return HTTPException(
                 status_code=200,
@@ -166,8 +177,7 @@ class DbWrapper:
             if payload["servis"]:
                 query["servis"] = {"$all": payload["servis"]}
             if payload["notlar"]:
-                query["notlar"] = query["notlar"].lower()
-                query["notlar"] = {"$regex": f".*{payload['notlar']}.*"}
+                query["notlar"] = {"$regex": f".*{self.tr_lower(payload['notlar'])}.*"}
 
             logger.info(query)
 
@@ -206,8 +216,9 @@ class DbWrapper:
                 if payload["gereksinimler"]:
                     query["gereksinimler"] = {"$all": payload["gereksinimler"]}
                 if payload["notlar"]:
-                    query["notlar"] = query["notlar"].lower()
-                    query["notlar"] = {"$regex": f".*{payload['notlar']}.*"}
+                    query["notlar"] = {
+                        "$regex": f".*{self.tr_lower(payload['notlar'])}.*"
+                    }
                 if payload["baslangic_zaman"] and payload["bitis_zaman"]:
                     query["zaman"] = {
                         "$lte": payload["bitis_zaman"],
