@@ -12,10 +12,10 @@ class SetInfo(BaseModel):
     il: Required[str]
     ilce: Required[str]
     adres: Required[str]
-    isim: Optional[str]
-    gereksinimler: conlist(str, max_items=5)
-    telefon: Optional[str]
+    isim: Optional[str] = ""
+    gereksinimler: conlist(str, max_items=5) = []
+    telefon: Optional[str] = ""
     lat: Required[float]
     lon: Required[float]
-    notlar: Optional[str]
+    notlar: Optional[str] = ""
     zaman: Required[datetime]
