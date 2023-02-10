@@ -1,10 +1,9 @@
-from datetime import datetime
 from typing import Optional, Required
 
 from pydantic import BaseModel, conlist
 
 
-class SetInfo(BaseModel):
+class SetServicePoint(BaseModel):
     """
     This class is used to create a model for info data.
     """
@@ -12,10 +11,10 @@ class SetInfo(BaseModel):
     il: Required[str]
     ilce: Required[str]
     adres: Required[str]
+    mahalle: Optional[str]
     isim: Optional[str]
-    gereksinimler: conlist(str, max_items=5)
+    servis: conlist(str, max_items=30)
     telefon: Optional[str]
     lat: Required[float]
     lon: Required[float]
     notlar: Optional[str]
-    zaman: Required[datetime]

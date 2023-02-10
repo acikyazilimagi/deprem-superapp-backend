@@ -7,7 +7,9 @@ from starlette.middleware.cors import CORSMiddleware
 
 from src.db_wrapper import DbWrapper
 from src.models.GetInfo import GetInfo
+from src.models.GetServicePoint import GetServicePoint
 from src.models.SetInfo import SetInfo
+from src.models.SetServicePoint import SetServicePoint
 
 load_dotenv(find_dotenv())
 
@@ -69,6 +71,43 @@ async def get_map_data(info: GetInfo):
 
         payload = info.dict()
         query = db.get_map_data(payload)
+
+        return query
+
+    except Exception as e:
+        logger.error(e)
+        return e
+
+
+@app.post("/set_service_point")
+async def set_service_point(info: SetServicePoint):
+    """
+    :param info: the data to be inserted
+    :return: the inserted data
+    """
+    try:
+        logger.info("Set service point method was called.")
+
+        payload = info.dict()
+        query = db.set_service_point(payload)
+
+        return query
+
+    except Exception as e:
+        logger.error(e)
+        return e
+
+
+@app.post("/get_service_point")
+async def get_service_point(info: GetServicePoint):
+    """
+    :return: the data in the database
+    """
+    try:
+        logger.info("Get service point method was called.")
+
+        payload = info.dict()
+        query = db.get_service_point(payload)
 
         return query
 

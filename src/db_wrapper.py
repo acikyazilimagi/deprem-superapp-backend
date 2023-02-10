@@ -97,21 +97,6 @@ class DbWrapper:
             logger.error(e)
             return e
 
-    def get_users(self):
-        """
-        :return: a list of all the users
-        """
-        try:
-            collection = self.get_collection("users")
-
-            logger.info("Get users method was called.")
-
-            return list(collection.find())
-
-        except Exception as e:
-            logger.error(e)
-            return e
-
     def set_map_data(self, payload: dict):
         """
         :param payload: the data to insert
@@ -132,6 +117,60 @@ class DbWrapper:
             return HTTPException(
                 status_code=500,
                 detail="An error occurred while inserting the data.",
+            )
+
+    def set_service_point(self, payload: dict):
+        """
+        :param payload: the data to insert
+        :return: the inserted data
+        """
+        try:
+            collection = self.get_collection("service_points")
+
+            logger.info("Set service point method was called.")
+
+            return HTTPException(
+                status_code=200,
+                detail=collection.insert_one(payload).inserted_id,
+            )
+
+        except Exception as e:
+            logger.error(e)
+            return HTTPException(
+                status_code=500,
+                detail="An error occurred while inserting the data.",
+            )
+
+    def get_service_point(self, payload: dict):
+        """
+        :param payload: the data to get
+        :return: the data
+        """
+        try:
+            collection = self.get_collection("service_points")
+
+            logger.info("Get service point method was called.")
+
+            query = {}
+
+            if payload["il"]:
+                query["il"] = payload["il"]
+            if payload["ilce"]:
+                query["ilce"] = payload["ilce"]
+            if payload["servis"]:
+                query["servis"] = {"$all": payload["servis"]}
+            if payload["notlar"]:
+                query["notlar"] = {"$regex": f".*{payload['notlar']}.*"}
+
+            logger.info(query)
+
+            return HTTPException(status_code=200, detail=list(collection.find(query)))
+
+        except Exception as e:
+            logger.error(e)
+            return HTTPException(
+                status_code=500,
+                detail="An error occurred while getting the data.",
             )
 
     def get_map_data(self, payload: dict):
