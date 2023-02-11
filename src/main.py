@@ -114,3 +114,36 @@ async def get_service_point(info: GetServicePoint):
     except Exception as e:
         logger.error(e)
         return e
+
+
+@app.post("/get_service_point_data")
+async def get_service_point(info: GetServicePoint):
+    """
+    :return: the data in the database as a CSV file
+    """
+    try:
+        logger.info("Get service point method was called.")
+
+        payload = info.dict()
+        query = db.get_service_point(payload)
+
+        # Convert the query result to a pandas DataFrame
+        df = pd.DataFrame(query)
+
+        # Convert the DataFrame to a CSV string
+        csv = df.to_csv(index=False)
+
+        # Set the response header to indicate the returned content is a CSV file
+        response = StreamingResponse(
+            io.StringIO(csv),
+            media_type="text/csv",
+        )
+        response.headers["Content-Disposition"] = "attachment; filename=service_points.csv"
+
+        return response
+
+    except Exception as e:
+        logger.error(e)
+        return e
+
+
