@@ -6,6 +6,7 @@ fastapi==0.90.0
 h11==0.14.0
 idna==3.4
 loguru==0.6.0
+pandas==1.5.3
 pydantic==1.10.4
 pymongo==4.3.3
 python-dotenv==0.21.1
