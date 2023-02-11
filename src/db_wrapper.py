@@ -238,3 +238,60 @@ class DbWrapper:
                 status_code=500,
                 detail="An error occurred while getting the data.",
             )
+
+    def test_set_map_data(self, payload: dict):
+        """
+        :param payload: the data to insert
+        :return: the inserted data
+        """
+        try:
+            collection = self.get_collection("test_map_data")
+
+            logger.info("Set map data method was called.")
+
+            if payload["notlar"]:
+                payload["notlar"] = self.tr_lower(payload["notlar"])
+
+            return HTTPException(
+                status_code=200,
+                detail=collection.insert_one(payload).inserted_id,
+            )
+
+        except Exception as e:
+            logger.error(e)
+            return HTTPException(
+                status_code=500,
+                detail="An error occurred while inserting the data.",
+            )
+
+    def test_get_map_data(self, payload: dict):
+        """
+        :param payload: the data to get
+        :return: the data
+        """
+        try:
+            collection = self.get_collection("test_map_data")
+
+            logger.info("Get service point method was called.")
+
+            query = {}
+
+            if payload["il"]:
+                query["il"] = payload["il"]
+            if payload["ilce"]:
+                query["ilce"] = payload["ilce"]
+            if payload["servis"]:
+                query["servis"] = {"$all": payload["servis"]}
+            if payload["notlar"]:
+                query["notlar"] = {"$regex": f".*{self.tr_lower(payload['notlar'])}.*"}
+
+            logger.info(query)
+
+            return HTTPException(status_code=200, detail=list(collection.find(query)))
+
+        except Exception as e:
+            logger.error(e)
+            return HTTPException(
+                status_code=500,
+                detail="An error occurred while getting the data.",
+            )

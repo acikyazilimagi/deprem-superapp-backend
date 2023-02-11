@@ -13,7 +13,7 @@ class SetServicePoint(BaseModel):
     adres: Required[str]
     mahalle: Optional[str] = ""
     isim: Optional[str] = ""
-    servis: conlist(str, max_items=30) = []
+    servis: conlist(str, max_items=50) = []
     telefon: Optional[str] = ""
     lat: Required[float]
     lon: Required[float]

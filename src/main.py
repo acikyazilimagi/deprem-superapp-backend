@@ -1,7 +1,11 @@
+import io
+
+import pandas as pd
 import pydantic
 from bson.objectid import ObjectId
 from dotenv import find_dotenv, load_dotenv
 from fastapi import FastAPI
+from fastapi.responses import StreamingResponse
 from loguru import logger
 from starlette.middleware.cors import CORSMiddleware
 
@@ -117,7 +121,7 @@ async def get_service_point(info: GetServicePoint):
 
 
 @app.post("/get_service_point_data")
-async def get_service_point(info: GetServicePoint):
+async def get_service_point_data(info: GetServicePoint):
     """
     :return: the data in the database as a CSV file
     """
@@ -138,7 +142,9 @@ async def get_service_point(info: GetServicePoint):
             io.StringIO(csv),
             media_type="text/csv",
         )
-        response.headers["Content-Disposition"] = "attachment; filename=service_points.csv"
+        response.headers[
+            "Content-Disposition"
+        ] = "attachment; filename=service_points.csv"
 
         return response
 
@@ -147,3 +153,38 @@ async def get_service_point(info: GetServicePoint):
         return e
 
 
+@app.post("/test_get_map_data")
+async def test_get_map_data(info: GetServicePoint):
+    """
+    :return: the data in the database
+    """
+    try:
+        logger.info("Get service point method was called.")
+
+        payload = info.dict()
+        query = db.test_get_map_data(payload)
+
+        return query
+
+    except Exception as e:
+        logger.error(e)
+        return e
+
+
+@app.post("/test_set_map_data")
+async def test_set_map_data(info: SetServicePoint):
+    """
+    :param info: the data to be inserted
+    :return: the inserted data
+    """
+    try:
+        logger.info("Set service point method was called.")
+
+        payload = info.dict()
+        query = db.test_set_map_data(payload)
+
+        return query
+
+    except Exception as e:
+        logger.error(e)
+        return e
