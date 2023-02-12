@@ -1,6 +1,7 @@
 <div align="center">
     <h1>Deprem Superapp Backend</h1>
     <h3>Basit arayüzlü https://depremproje.com un backendi.</h3>
+    <img src="https://user-images.githubusercontent.com/48323786/218339235-cbb1f4f0-c01d-4162-95f8-f1d1ec217731.png" alt="Deprem Superapp Backend Logo">
 </div>
 
 <br>
