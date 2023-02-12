@@ -244,10 +244,11 @@ class DbWrapper:
         :param payload: the data to insert
         :return: the inserted data
         """
+
         try:
             collection = self.get_collection("test_map_data")
 
-            logger.info("Set map data method was called.")
+            logger.info("Test Set map data method was called.")
 
             if payload["notlar"]:
                 payload["notlar"] = self.tr_lower(payload["notlar"])
@@ -272,22 +273,39 @@ class DbWrapper:
         try:
             collection = self.get_collection("test_map_data")
 
-            logger.info("Get service point method was called.")
+            logger.info("Test Get map data method was called.")
 
             query = {}
 
-            if payload["il"]:
-                query["il"] = payload["il"]
-            if payload["ilce"]:
-                query["ilce"] = payload["ilce"]
-            if payload["servis"]:
-                query["servis"] = {"$all": payload["servis"]}
-            if payload["notlar"]:
-                query["notlar"] = {"$regex": f".*{self.tr_lower(payload['notlar'])}.*"}
+            if payload["guncel_tarih"]:
+                query["zaman"] = {"$gt": payload["guncel_tarih"]}
+                return HTTPException(
+                    status_code=200, detail=list(collection.find(query))
+                )
 
-            logger.info(query)
+            else:
+                if payload["il"]:
+                    query["il"] = payload["il"]
+                if payload["ilce"]:
+                    query["ilce"] = payload["ilce"]
+                if payload["gereksinimler"]:
+                    query["gereksinimler"] = {"$all": payload["gereksinimler"]}
+                if payload["notlar"]:
+                    query["notlar"] = {
+                        "$regex": f".*{self.tr_lower(payload['notlar'])}.*"
+                    }
+                if payload["baslangic_zaman"] and payload["bitis_zaman"]:
+                    query["zaman"] = {
+                        "$lte": payload["bitis_zaman"],
+                        "$gte": payload["baslangic_zaman"],
+                    }
 
-            return HTTPException(status_code=200, detail=list(collection.find(query)))
+                return HTTPException(
+                    status_code=200,
+                    detail=list(
+                        collection.find(query).sort("zaman", pymongo.DESCENDING)
+                    ),
+                )
 
         except Exception as e:
             logger.error(e)
