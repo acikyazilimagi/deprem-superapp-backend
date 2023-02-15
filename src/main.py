@@ -31,7 +31,7 @@ app.add_middleware(
 )
 
 
-@app.get("/")
+#@app.get("/")
 async def root():
     """
     :return: a welcoming screen
@@ -46,7 +46,7 @@ async def root():
         return e
 
 
-@app.post("/set_map_data")
+#@app.post("/set_map_data")
 async def set_map_data(info: SetInfo):
     """
     :param info: the data to be inserted
@@ -65,7 +65,7 @@ async def set_map_data(info: SetInfo):
         return e
 
 
-@app.post("/get_map_data")
+#@app.post("/get_map_data")
 async def get_map_data(info: GetInfo):
     """
     :return: the data in the database
@@ -83,7 +83,7 @@ async def get_map_data(info: GetInfo):
         return e
 
 
-@app.post("/set_service_point")
+#@app.post("/set_service_point")
 async def set_service_point(info: SetServicePoint):
     """
     :param info: the data to be inserted
@@ -102,7 +102,7 @@ async def set_service_point(info: SetServicePoint):
         return e
 
 
-@app.post("/get_service_point")
+#@app.post("/get_service_point")
 async def get_service_point(info: GetServicePoint):
     """
     :return: the data in the database
@@ -120,7 +120,7 @@ async def get_service_point(info: GetServicePoint):
         return e
 
 
-@app.post("/get_service_point_data")
+#@app.post("/get_service_point_data")
 async def get_service_point_data(info: GetServicePoint):
     """
     :return: the data in the database as a CSV file
@@ -153,7 +153,7 @@ async def get_service_point_data(info: GetServicePoint):
         return e
 
 
-@app.post("/test_get_map_data")
+#@app.post("/test_get_map_data")
 async def test_get_map_data(info: GetServicePoint):
     """
     :return: the data in the database
@@ -171,7 +171,7 @@ async def test_get_map_data(info: GetServicePoint):
         return e
 
 
-@app.post("/test_set_map_data")
+#@app.post("/test_set_map_data")
 async def test_set_map_data(info: SetServicePoint):
     """
     :param info: the data to be inserted
